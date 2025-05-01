@@ -1,14 +1,14 @@
 const express = require('express');
-const { register, login } = require('../controllers/authController');
+const { register, login: loginUser } = require('../controllers/authController');
 const mapUser = require('../helpers/mapUser');
 
 const router = express.Router({ mergeParams: true });
 
 router.post('/register', async (req, res) => {
-  const { login, password } = req.body;
+  const { login, email, password } = req.body;
 
   try {
-    const { user, token } = await register(login, password);
+    const { user, token } = await register(login, email, password);
 
     res
       .cookie('token', token, { httpOnly: true })
@@ -19,8 +19,10 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+  const { login, password } = req.body;
+
   try {
-    const { user, token } = await login(req.body.login, req.body.password);
+    const { user, token } = await loginUser(login, password);
 
     res
       .cookie('token', token, { httpOnly: true })

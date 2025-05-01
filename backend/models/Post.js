@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const validator = require('validator');
 
-const ArticleSchema = new Schema(
+const PostSchema = new Schema(
   {
     title: { type: String, required: true },
     image: {
@@ -23,6 +23,6 @@ const ArticleSchema = new Schema(
   { timestamps: true }
 );
 
-const Article = mongoose.model('Article', ArticleSchema);
+const Post = mongoose.model('Post', PostSchema);
 
-module.exports = Article;
+module.exports = Post;

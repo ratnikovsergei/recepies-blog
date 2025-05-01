@@ -33,7 +33,7 @@ router.patch('/:id', isAuth, checkRole([ROLES.ADMIN]), async (req, res) => {
 router.delete('/:id', isAuth, checkRole([ROLES.ADMIN]), async (req, res) => {
   await deleteUser(req.params.id);
 
-  res.send({ error: null });
+  res.send({ error: null, message: 'Пользователь удален' });
 });
 
 module.exports = router;
