@@ -5,6 +5,7 @@ const {
   deleteRecipe,
   getRecipe,
   getAllRecipes,
+  getRecipesByCategory,
   getLastFiveRecipes,
 } = require('../controllers/recipe');
 const { addComment, deleteComment } = require('../controllers/comments');
@@ -34,7 +35,15 @@ router.get('/latest', async (req, res) => {
   const limit = parseInt(req.query.limit) || 5;
 
   const recipes = await getLastFiveRecipes(limit);
-  res.send({ data: recipes });
+  res.send({ data: recipes.map(mapRecipe) });
+});
+
+router.get('/categories/:category', async (req, res) => {
+  const { category } = req.params;
+  const { limit, page } = req.query;
+
+  const { recipes, lastPage } = await getRecipesByCategory(category, limit, page);
+  res.send({ data: { lastPage, recipes: recipes.map(mapRecipe) } });
 });
 
 router.post('/', isAuth, async (req, res) => {

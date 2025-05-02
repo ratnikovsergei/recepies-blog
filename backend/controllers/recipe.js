@@ -44,6 +44,21 @@ async function getAllRecipes(search = '', limit = 10, page = 1) {
   };
 }
 
+async function getRecipesByCategory(category, limit = 10, page = 1) {
+  const [recipes, count] = await Promise.all([
+    Recipe.find({ category })
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 }),
+    Recipe.countDocuments({ category }),
+  ]);
+
+  return {
+    recipes,
+    lastPage: Math.ceil(count / limit),
+  };
+}
+
 async function getLastFiveRecipes(limit = 5) {
   const lastRecipes = await Recipe.find().limit(limit).sort({ createdAt: -1 });
 
@@ -59,6 +74,7 @@ module.exports = {
   editRecipe,
   getRecipe,
   getAllRecipes,
+  getRecipesByCategory,
   getLastFiveRecipes,
   deleteRecipe,
 };
