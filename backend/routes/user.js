@@ -4,7 +4,7 @@ const {
   getAllUsers,
   getRoles,
   updateUserRole,
-} = require('../controllers/userController');
+} = require('../controllers/user');
 const isAuth = require('../middlewares/isAuth');
 const checkRole = require('../middlewares/checkRole');
 const mapUser = require('../helpers/mapUser');

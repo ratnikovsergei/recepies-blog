@@ -6,7 +6,7 @@ const {
   getPost,
   getAllPosts,
   getLastFivePosts,
-} = require('../controllers/postController');
+} = require('../controllers/post');
 const isAuth = require('../middlewares/isAuth');
 const checkRole = require('../middlewares/checkRole');
 const ROLES = require('../constants/roles');
