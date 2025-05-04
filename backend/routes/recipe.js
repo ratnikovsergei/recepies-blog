@@ -25,10 +25,11 @@ router.get('/', async (req, res) => {
   res.send({ data: { lastPage, recipes: recipes.map(mapRecipe) } });
 });
 
-router.get('/:id', async (req, res) => {
-  const recipe = await getRecipe(req.params.id);
+router.get('/search', async (req, res) => {
+  const { search, limit = 10, page = 1 } = req.query;
+  const { recipes, lastPage } = await getAllRecipes(search, limit, page);
 
-  res.send({ data: mapRecipe(recipe) });
+  res.send({ data: { lastPage, recipes: recipes.map(mapRecipe) } });
 });
 
 router.get('/latest', async (req, res) => {
@@ -36,6 +37,12 @@ router.get('/latest', async (req, res) => {
 
   const recipes = await getLastFiveRecipes(limit);
   res.send({ data: recipes.map(mapRecipe) });
+});
+
+router.get('/:id', async (req, res) => {
+  const recipe = await getRecipe(req.params.id);
+
+  res.send({ data: mapRecipe(recipe) });
 });
 
 router.get('/categories/:category', async (req, res) => {
@@ -53,15 +60,6 @@ router.post('/', isAuth, async (req, res) => {
   res.send({ data: mapRecipe(newRecipe) });
 });
 
-router.post('/:id/comments', isAuth, async (req, res) => {
-  const newComment = await addComment(req.params.id, {
-    content: req.body.content,
-    author: req.user.id,
-  });
-
-  res.send({ data: mapComment(newComment) });
-});
-
 router.patch('/:id', isAuth, canEditRecipe, async (req, res) => {
   const editedRecipe = await editRecipe(req.params.id, req.body);
 
@@ -72,6 +70,15 @@ router.delete('/:id', isAuth, canEditRecipe, async (req, res) => {
   await deleteRecipe(req.params.id);
 
   res.send({ error: null, message: 'Рецепт удален' });
+});
+
+router.post('/:id/comments', isAuth, async (req, res) => {
+  const newComment = await addComment(req.params.id, {
+    content: req.body.content,
+    author: req.user.id,
+  });
+
+  res.send({ data: mapComment(newComment) });
 });
 
 router.delete(
