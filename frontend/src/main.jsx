@@ -1,6 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage, NotFoundPage, SearchPage } from './pages';
+import { Provider } from 'react-redux';
+import { store } from './store/store.js';
+import { HomePage, NotFoundPage, SearchPage, RecipePage } from './pages';
 import App from './App.jsx';
 import './index.css';
 
@@ -12,9 +14,13 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/search', element: <SearchPage /> },
-      // { path: '/categories/:category', element: <CategoryPage /> },
+      { path: '/recipes/:id', element: <RecipePage /> },
     ],
   },
 ]);
 
-createRoot(document.getElementById('root')).render(<RouterProvider router={router} />);
+createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
+);
